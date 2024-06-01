@@ -1,0 +1,23 @@
+model Savor {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  recipe_id Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user   User   @relation(fields: [user_id], references: [id])
+  recipe Recipe @relation(fields: [recipe_id], references: [id])
+
+  @@map("savor")
+}
+
+// Imports
+model User {
+  id     Int     @id @default(autoincrement())
+  savors Savor[]
+}
+
+model Recipe {
+  id     Int     @id @default(autoincrement())
+  savors Savor[]
+}

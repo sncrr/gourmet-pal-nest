@@ -1,0 +1,65 @@
+model Recipe {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  name        String
+  description String
+  prep_time   Int //In minutes
+  cook_time   Int //In minutes
+  servings    Int //Pax
+  privacy     String @default("private")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  images      RecipeImage[]
+  ingredients RecipeIngredient[]
+  steps       RecipeStep[]
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("recipe")
+}
+
+model RecipeImage {
+  id        Int    @id @default(autoincrement())
+  recipe_id Int
+  path      String
+
+  recipe Recipe @relation(fields: [recipe_id], references: [id])
+
+  @@map("recipe_image")
+}
+
+model RecipeIngredient {
+  id            Int   @id @default(autoincrement())
+  recipe_id     Int
+  ingredient_id Int
+  unit          String
+  qty           String
+
+  recipe     Recipe     @relation(fields: [recipe_id], references: [id])
+  ingredient Ingredient @relation(fields: [ingredient_id], references: [id])
+
+  @@map("recipe_ingredient")
+}
+
+model RecipeStep {
+  id          Int    @id @default(autoincrement())
+  recipe_id   Int
+  step_number Int
+  instruction String
+
+  recipe Recipe @relation(fields: [recipe_id], references: [id])
+
+  @@map("recipe_step")
+}
+
+//Imports
+model User {
+  id      Int      @id @default(autoincrement())
+  recipes Recipe[]
+}
+
+model Ingredient {
+  id                Int                @id @default(autoincrement())
+  recipeIngredients RecipeIngredient[]
+}

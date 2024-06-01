@@ -1,0 +1,26 @@
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  auth_type  String?
+  first_name String?
+  last_name  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  followers UserFollower[] @relation(name: "UserFollowers")
+  followeds UserFollower[] @relation(name: "FollowedUsers")
+
+  @@map("user")
+}
+
+model UserFollower {
+  id          Int @id @default(autoincrement())
+  user_id     Int
+  followed_id Int
+
+  user     User @relation(name: "UserFollowers", fields: [user_id], references: [id])
+  followed User @relation(name: "FollowedUsers", fields: [followed_id], references: [id])
+
+  @@map("user_follower")
+}

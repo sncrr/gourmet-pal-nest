@@ -1,0 +1,15 @@
+{
+  "mixers": [
+    {
+        "input": [
+            "prisma/base.prisma",
+            "prisma/schemas/user.prisma",
+            "prisma/schemas/recipe.prisma",
+            "prisma/schemas/ingredient.prisma",
+            "prisma/schemas/comment.prisma",
+            "prisma/schemas/savor.prisma"
+        ],
+        "output": "prisma/schema.prisma"
+    }
+  ]
+}
