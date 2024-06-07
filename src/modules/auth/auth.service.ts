@@ -3,6 +3,9 @@ import { UserService } from '../user/services/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { GoogleUser } from './auth.types';
+import { AUTH_TYPE } from '../user/user.contants';
+import { BCRYPT_ROUNDS } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +18,8 @@ export class AuthService {
 
     const user = await this.userService.findUser({
       where: {
-        email: email
+        email: email,
+        auth_type: AUTH_TYPE.EMAIL
       }
     });
     
@@ -45,15 +49,54 @@ export class AuthService {
   }
 
   async register(payload: any) {
-    const user = await this.userService.createUser(payload);
+
+    const hashedPassword = await bcrypt.hash(
+      payload.password,
+      BCRYPT_ROUNDS,
+    );
+
+    const user = await this.userService.createUser({
+      ...payload,
+      password: hashedPassword,
+      auth_type: AUTH_TYPE.EMAIL
+    });
+    
     if(user && user.id) {
-      const payload = { email: user.email, sub: user.id };
+      const jwtPayload = { email: user.email, sub: user.id };
       return {
-        access_token: this.jwtService.sign(payload),
+        access_token: this.jwtService.sign(jwtPayload),
       };
     }
     else {
       throw new InternalServerErrorException('Something went wrong while creating user.')
+    }
+  }
+
+  async authenticateGoogle(payload: GoogleUser) {
+
+    let user = await this.userService.findUser({
+      where: {
+        email: payload.email
+      }
+    });
+
+    if(!user || !user.id) {
+      user = await this.userService.createUser({
+        email: payload.email,
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+        auth_type: AUTH_TYPE.GOOGLE,
+      })
+    }
+
+    if(user && user.id) {
+      const jwtPayload = { email: user.email, sub: user.id };
+      return {
+        access_token: this.jwtService.sign(jwtPayload),
+      };
+    }
+    else {
+      throw new InternalServerErrorException('Something went wrong while authenticating.')
     }
   }
 }

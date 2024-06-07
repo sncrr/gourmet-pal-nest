@@ -33,16 +33,7 @@ export class UserService extends BaseService<User> {
     let emailValid = emailRegex.test(payload.email);
 
     if(emailValid) {
-      const hashedPassword = await bcrypt.hash(
-        payload.password,
-        BCRYPT_ROUNDS,
-      );
-
-      return await this.create({
-        ...payload,
-        password: hashedPassword,
-        auth_type: 'email'
-      });
+      return await this.create(payload);
     }
     else {
       throw new UnprocessableEntityException('Email is not valid');

@@ -1,10 +1,9 @@
-import { Get, InternalServerErrorException, Param } from "@nestjs/common";
-import { BaseService } from "./base.service";
+import { InternalServerErrorException } from "@nestjs/common";
 
 export class BaseController <T> {
 
   constructor(
-    protected service: BaseService<T>,
+    protected service: any,
   ) {}
 
   protected throwError = {

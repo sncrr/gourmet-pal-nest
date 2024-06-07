@@ -6,7 +6,7 @@ import { RecipeImageService } from './services/recipe_image.service';
 import { CreateRecipePayload } from './recipe.types';
 import { Prisma, Recipe, User } from '@prisma/client';
 import { IngredientService } from '../../ingredient/ingredient.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthService } from '../auth/auth.service';
 
 @Controller('api/recipe')
