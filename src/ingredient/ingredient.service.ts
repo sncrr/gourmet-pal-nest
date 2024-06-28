@@ -17,9 +17,9 @@ export class IngredientService extends BaseService<Ingredient> {
 
     for(let item of payload) {
       
-      if(item.ingredient_id) {
+      if(item.ingredientId) {
         ingredients.push({
-          ingredient_id: item.ingredient_id,
+          ingredientId: item.ingredientId,
           unit: item.unit,
           qty: item.qty
         });
@@ -33,7 +33,7 @@ export class IngredientService extends BaseService<Ingredient> {
         });
 
         ingredients.push({
-          ingredient_id: newIngredient.id,
+          ingredientId: newIngredient.id,
           unit: item.unit,
           qty: item.qty
         });

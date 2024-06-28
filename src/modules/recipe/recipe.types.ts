@@ -1,23 +1,23 @@
 export type CreateRecipePayload = {
   name: string,
   description: string,
-  prep_time: number,
-  cook_time: number,
+  prepTime: number,
+  cookTime: number,
   servings: number,
-  user_id: number,
+  userId: number,
   privacy: string,
 
   ingredients: CreateRecipeIngredientPayload[]
 
   steps: {
-    step_number: number,
+    stepNumber: number,
     instruction: string,
   }[]
 
 }
 
 export type CreateRecipeIngredientPayload = {
-  ingredient_id?: number,
+  ingredientId?: number,
   name?: string,
   unit: string,
   qty: string,

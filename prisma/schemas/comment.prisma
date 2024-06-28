@@ -1,24 +1,29 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
 model Comment {
-  id        Int      @id @default(autoincrement())
-  user_id   Int
-  recipe_id Int
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  recipeId  String   @db.ObjectId
   message   String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  user   User   @relation(fields: [user_id], references: [id])
-  recipe Recipe @relation(fields: [recipe_id], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  recipe Recipe @relation(fields: [recipeId], references: [id])
 
-  @@map("comment")
+  @@map("comments")
 }
 
 // Imports
 model User {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   comments Comment[]
 }
 
 model Recipe {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   comments Comment[]
 }

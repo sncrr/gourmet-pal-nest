@@ -19,7 +19,7 @@ export class AuthService {
     const user = await this.userService.findUser({
       where: {
         email: email,
-        auth_type: AUTH_TYPE.EMAIL
+        authType: AUTH_TYPE.EMAIL
       }
     });
     
@@ -58,7 +58,7 @@ export class AuthService {
     const user = await this.userService.createUser({
       ...payload,
       password: hashedPassword,
-      auth_type: AUTH_TYPE.EMAIL
+      authType: AUTH_TYPE.EMAIL
     });
     
     if(user && user.id) {
@@ -83,9 +83,9 @@ export class AuthService {
     if(!user || !user.id) {
       user = await this.userService.createUser({
         email: payload.email,
-        first_name: payload.firstName,
-        last_name: payload.lastName,
-        auth_type: AUTH_TYPE.GOOGLE,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        authType: AUTH_TYPE.GOOGLE,
       })
     }
 

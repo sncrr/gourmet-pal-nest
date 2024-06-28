@@ -29,10 +29,9 @@ export class RecipeController {
     try {
       
       let ingredients = await this.ingredientService.checkIngredients(body.ingredients);
-    
       let recipeData: Prisma.RecipeUncheckedCreateInput = {
         ...body,
-        user_id: req.user.userId,
+        userId: req.user.userId,
         steps: {
           create: body.steps
         },
@@ -59,7 +58,7 @@ export class RecipeController {
     try {
      let recipes = this.recipeService.findRecipes({
       where: {
-        user_id: req.user.userId,
+        userId: req.user.userId,
       },
       include: {
         ingredients: true,
@@ -84,8 +83,8 @@ export class RecipeController {
     try {
      let recipe = this.recipeService.findRecipe({
       where: {
-        user_id: req.user.userId,
-        id: parseInt(recipeId),
+        userId: req.user.userId,
+        id: recipeId,
       },
       include: {
         ingredients: true,
