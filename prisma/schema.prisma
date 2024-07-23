@@ -33,7 +33,7 @@ model UserFollower {
   user       User   @relation(name: "UserFollowers", fields: [userId], references: [id])
   followed   User   @relation(name: "FollowedUsers", fields: [followedId], references: [id])
 
-  @@map("userFollowers")
+  @@map("user_followers")
 }
 
 model Recipe {
@@ -63,7 +63,7 @@ model RecipeImage {
   path     String
   recipe   Recipe @relation(name: "RecipeToRecipeImage", fields: [recipeId], references: [id])
 
-  @@map("recipeImages")
+  @@map("recipe_images")
 }
 
 model RecipeIngredient {
@@ -75,7 +75,7 @@ model RecipeIngredient {
   recipe       Recipe     @relation(name: "RecipeToRecipeIngredient", fields: [recipeId], references: [id])
   ingredient   Ingredient @relation(name: "IngredientToRecipeIngredient", fields: [ingredientId], references: [id])
 
-  @@map("recipeIngredients")
+  @@map("recipe_ingredients")
 }
 
 model RecipeStep {
@@ -85,7 +85,7 @@ model RecipeStep {
   instruction String
   recipe      Recipe @relation(name: "RecipeToRecipeStep", fields: [recipeId], references: [id])
 
-  @@map("recipeSteps")
+  @@map("recipe_steps")
 }
 
 model Ingredient {

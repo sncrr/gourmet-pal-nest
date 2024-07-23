@@ -7,7 +7,7 @@ import { CreateRecipePayload } from './recipe.types';
 import { Prisma, Recipe, User } from '@prisma/client';
 import { IngredientService } from '../../ingredient/ingredient.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { AuthService } from '../auth/auth.service';
+import { PaginatedResult } from 'src/utils/paginator';
 
 @Controller('api/recipe')
 export class RecipeController {
@@ -17,7 +17,7 @@ export class RecipeController {
     protected recStepService: RecipeStepService,
     protected recImageService: RecipeImageService,
     protected ingredientService: IngredientService,
-  ) {}
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
@@ -27,7 +27,7 @@ export class RecipeController {
   ): Promise<Recipe> {
 
     try {
-      
+
       let ingredients = await this.ingredientService.checkIngredients(body.ingredients);
       let recipeData: Prisma.RecipeUncheckedCreateInput = {
         ...body,
@@ -39,11 +39,11 @@ export class RecipeController {
           create: ingredients
         }
       };
-  
+
       let recipe = this.recipeService.createRecipe(recipeData);
       return recipe;
     }
-    catch(error) {
+    catch (error) {
       console.error(error);
       throw new InternalServerErrorException(error.message)
     }
@@ -52,22 +52,25 @@ export class RecipeController {
   @UseGuards(JwtAuthGuard)
   @Get('/mine')
   async getUserRecipes(
-    @Request() req: any
-  ): Promise<Recipe[]> {
-
+    @Request() req: any,
+  ): Promise<PaginatedResult<Recipe>> {
     try {
-     let recipes = this.recipeService.findRecipes({
-      where: {
-        userId: req.user.userId,
-      },
-      include: {
-        ingredients: true,
-        steps: true,
-      }
-     });
-     return recipes;
+
+      let pageOptions = req.query;
+      let recipes = this.recipeService.findRecipes({
+        where: {
+          userId: req.user.userId,
+        },
+        include: {
+          // ingredients: true,
+          // steps: true,
+        },
+        page: pageOptions
+      });
+
+      return recipes;
     }
-    catch(error) {
+    catch (error) {
       console.error(error);
       throw new InternalServerErrorException(error.message)
     }
@@ -81,19 +84,19 @@ export class RecipeController {
   ): Promise<Recipe> {
 
     try {
-     let recipe = this.recipeService.findRecipe({
-      where: {
-        userId: req.user.userId,
-        id: recipeId,
-      },
-      include: {
-        ingredients: true,
-        steps: true,
-      }
-     });
-     return recipe;
+      let recipe = this.recipeService.findRecipe({
+        where: {
+          userId: req.user.userId,
+          id: recipeId,
+        },
+        include: {
+          ingredients: true,
+          steps: true,
+        }
+      });
+      return recipe;
     }
-    catch(error) {
+    catch (error) {
       console.error(error);
       throw new InternalServerErrorException(error.message)
     }

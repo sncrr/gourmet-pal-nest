@@ -31,7 +31,7 @@ model RecipeImage {
 
   recipe Recipe @relation(fields: [recipeId], references: [id])
 
-  @@map("recipeImages")
+  @@map("recipe_images")
 }
 
 model RecipeIngredient {
@@ -44,7 +44,7 @@ model RecipeIngredient {
   recipe     Recipe     @relation(fields: [recipeId], references: [id])
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
-  @@map("recipeIngredients")
+  @@map("recipe_ingredients")
 }
 
 model RecipeStep {
@@ -55,7 +55,7 @@ model RecipeStep {
 
   recipe Recipe @relation(fields: [recipeId], references: [id])
 
-  @@map("recipeSteps")
+  @@map("recipe_steps")
 }
 
 //Imports
